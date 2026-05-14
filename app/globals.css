@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #F5F0E8;
+  --text: #3D2B1F;
+  --accent: #C17F3C;
+  --muted: #8C7B6B;
+  --border: #E8E0D4;
+  --card: #FDFAF5;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.serif {
+  font-family: Georgia, 'Noto Serif SC', serif;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(61,43,31,0.08);
+  border: 1px solid var(--border);
+}
