@@ -19,8 +19,7 @@
 
 # production
 /build
-# out 目录现在需要提交（静态部署）
-# /out
+# out 目录已纳入提交，用于静态托管
 
 # misc
 .DS_Store
