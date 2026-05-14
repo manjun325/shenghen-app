@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
 
-type TagType = "all" | "daily" | "book" | "movie" | "music" | "place";
+type TagType = string;
 
-const TAGS: { id: TagType; label: string; emoji: string }[] = [
+type TagDef = { id: TagType; label: string; emoji: string };
+
+const DEFAULT_TAGS: TagDef[] = [
   { id: "all", label: "全部", emoji: "" },
   { id: "daily", label: "日常", emoji: "☀️" },
   { id: "book", label: "书籍", emoji: "📚" },
@@ -67,6 +69,14 @@ const mockData = [
 export default function TimelinePage() {
   const [activeTag, setActiveTag] = useState<TagType>("all");
   const [expanded, setExpanded] = useState<number | null>(null);
+  const [tags, setTags] = useState<TagDef[]>(DEFAULT_TAGS);
+
+  const addCustomTag = () => {
+    const label = window.prompt("给新标签起个名字（例：旅行、咖啡、运动…）");
+    if (!label) return;
+    const id = `custom-${Date.now()}`;
+    setTags(prev => [...prev, { id, label: label.slice(0, 6), emoji: "🏷️" }]);
+  };
 
   const filtered = activeTag === "all" ? mockData : mockData.filter(m => m.tag === activeTag);
 
@@ -80,7 +90,7 @@ export default function TimelinePage() {
   return (
     <div>
       {/* 顶部 */}
-      <div className="flex items-center justify-between px-4 pt-4 pb-2">
+      <div className="flex items-center justify-between px-4 pt-4 pb-1">
         <h1 className="text-2xl font-bold">时间线</h1>
         <button>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#1A1A1A">
@@ -89,9 +99,18 @@ export default function TimelinePage() {
         </button>
       </div>
 
+      {/* 自动识别说明条 */}
+      <div className="mx-4 mb-2 rounded-xl px-3 py-2 flex items-center gap-2"
+        style={{ background: 'linear-gradient(90deg,#FFF0F2 0%,#FFF7F8 100%)' }}>
+        <span className="text-lg">🤖</span>
+        <p className="text-xs leading-snug" style={{ color: '#1A1A1A' }}>
+          每条时光都已自动识别 <span style={{ color: '#FF2442', fontWeight: 600 }}>书籍 · 电影 · 音乐 · 地点</span>
+        </p>
+      </div>
+
       {/* 内容类型筛选 */}
       <div className="flex gap-2 px-4 pb-3 overflow-x-auto">
-        {TAGS.map(tag => (
+        {tags.map(tag => (
           <button key={tag.id} onClick={() => setActiveTag(tag.id)}
             className="flex items-center gap-1 px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-all"
             style={{
@@ -105,6 +124,11 @@ export default function TimelinePage() {
             )}
           </button>
         ))}
+        <button onClick={addCustomTag}
+          className="flex items-center gap-1 px-3 py-1.5 rounded-full text-sm whitespace-nowrap"
+          style={{ border: '1px dashed #C8C8C8', color: '#666', background: '#fff' }}>
+          ＋ 添加
+        </button>
       </div>
 
       {/* 分隔线 */}
@@ -141,12 +165,15 @@ export default function TimelinePage() {
                         <p className="text-sm font-medium leading-snug mb-1.5" style={{ color: '#1A1A1A' }}>
                           {item.title}
                         </p>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-xs px-2 py-0.5 rounded-full"
                             style={{ background: '#E8E8E8', color: '#666' }}>
-                            {item.emoji} {TAGS.find(t => t.id === item.tag)?.label}
+                            {item.emoji} {tags.find(t => t.id === item.tag)?.label ?? item.tag}
                           </span>
-                          <span className="text-xs" style={{ color: '#9B9B9B' }}>🌐</span>
+                          <span className="text-xs px-2 py-0.5 rounded-full"
+                            style={{ background: '#FFF0F2', color: '#FF2442' }}>
+                            🤖 {item.detail}
+                          </span>
                         </div>
                       </div>
 
