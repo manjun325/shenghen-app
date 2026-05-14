@@ -19,6 +19,8 @@
 
 # production
 /build
+# out 目录现在需要提交（静态部署）
+# /out
 
 # misc
 .DS_Store
