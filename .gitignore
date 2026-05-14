@@ -15,7 +15,7 @@
 
 # next.js
 /.next/
-/out/
+# /out/  -- 注释掉：out 目录已纳入提交用于静态托管，详见 netlify.toml
 
 # production
 /build
