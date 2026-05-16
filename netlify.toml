@@ -1,3 +1,12 @@
 [build]
   publish = "out"
-  command = "echo 'skip build'"
+  command = "echo 'using pre-built out/ from repo'"
+
+[build.environment]
+  # NPM_FLAGS="--version" 是个 Netlify 社区常用技巧：
+  # 让 Netlify 自动 npm install 阶段执行 `npm install --version`，
+  # 这只会打印 npm 版本立即退出，等同于跳过依赖安装。
+  # 我们的 out/ 已经在仓库里构建好了，CI 不需要装任何东西。
+  NPM_FLAGS = "--version"
+  # 同时跳过 Netlify 的 Next.js Runtime 插件（若被自动安装）
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
